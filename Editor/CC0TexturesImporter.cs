@@ -59,6 +59,12 @@ namespace Zigurous.Importer
 
         private void Import()
         {
+            if (this.assetId == null || this.assetId.Length == 0)
+            {
+                LogError("Invalid asset id");
+                return;
+            }
+
             string downloadLink = String.Format(
                 format: "https://cc0textures.com/get?file={0}_{1}-{2}.zip",
                 arg0: this.assetId,
