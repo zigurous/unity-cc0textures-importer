@@ -1,6 +1,7 @@
 ﻿using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -12,6 +13,18 @@ namespace Zigurous.Importer
 {
     public sealed class CC0TexturesImporter : EditorWindow
     {
+        public enum MapType
+        {
+            Albedo,
+            Normal,
+            Displacement,
+            Roughness,
+            Metallic,
+            Occlusion,
+            Emission,
+            None
+        }
+
         public enum Resolution
         {
             _2K,
@@ -31,6 +44,8 @@ namespace Zigurous.Importer
         private Format format = Format.JPG;
         private string outputName;
         private string outputPath = "/";
+        private Material outputMaterial;
+        private List<string> unzippedFiles = new List<string>();
 
         [MenuItem("Window/CC0Textures Importer")]
         public static void ShowWindow()
@@ -52,17 +67,27 @@ namespace Zigurous.Importer
             this.outputPath = EditorGUILayout.TextField("Output Path", this.outputPath);
 
             EditorGUILayout.Space();
-            if (GUILayout.Button("Import")) {
+            if (GUILayout.Button("Import Textures")) {
                 Import();
+            }
+
+            if (GUILayout.Button("Import as Material")) {
+                Import(createMaterial: true);
             }
         }
 
-        private void Import()
+        private void Import(bool createMaterial = false)
         {
             if (this.assetId == null || this.assetId.Length == 0)
             {
                 LogError("Invalid asset id");
                 return;
+            }
+
+            if (createMaterial) {
+                this.outputMaterial = new Material(Shader.Find("Standard"));
+            } else {
+                this.outputMaterial = null;
             }
 
             string downloadLink = String.Format(
@@ -72,34 +97,6 @@ namespace Zigurous.Importer
                 arg2: FormatToString(this.format));
 
             DownloadZip(downloadLink);
-        }
-
-        private string ResolutionToString(Resolution resolution)
-        {
-            switch (resolution)
-            {
-                case Resolution._2K:
-                    return "2K";
-                case Resolution._4K:
-                    return "4K";
-                case Resolution._8K:
-                    return "8K";
-                default:
-                    return "2K";
-            }
-        }
-
-        private string FormatToString(Format format)
-        {
-            switch (format)
-            {
-                case Format.JPG:
-                    return "JPG";
-                case Format.PNG:
-                    return "PNG";
-                default:
-                    return "JPG";
-            }
         }
 
         private async void DownloadZip(string link)
@@ -130,23 +127,29 @@ namespace Zigurous.Importer
         {
             Log("Importing asset...");
 
-            string zipFile = Application.dataPath;
-            string pathToRemove = "/Assets";
-            int removeIndex = zipFile.LastIndexOf(pathToRemove);
-            zipFile = zipFile.Remove(removeIndex, pathToRemove.Length);
-            zipFile += "/CC0Textures.zip";
-
             if (!this.outputPath.EndsWith("/")) {
                 this.outputPath += "/";
             }
 
-            UnzipFiles(zipFile, Application.dataPath);
+            string zipFilePath = Application.dataPath;
+            int removeIndex = zipFilePath.LastIndexOf("/Assets");
+            zipFilePath = zipFilePath.Remove(removeIndex, "/Assets".Length);
+            zipFilePath += "/CC0Textures.zip";
+
+            UnzipFiles(zipFilePath);
             AssetDatabase.Refresh();
+
+            if (this.outputMaterial != null) {
+                CreateMaterialAsset();
+            }
+
             Log("Finished");
         }
 
-        private void UnzipFiles(string filePath, string outputDirectory)
+        private void UnzipFiles(string filePath)
         {
+            this.unzippedFiles.Clear();
+
             if (!System.IO.File.Exists(filePath))
             {
                 LogError("Zip file does not exist");
@@ -166,7 +169,6 @@ namespace Zigurous.Importer
                 try
                 {
                     ZipFile zipFile = new ZipFile(fs);
-                    int numFiles = 0;
 
                     if (!zipFile.TestArchive(true))
                     {
@@ -193,7 +195,8 @@ namespace Zigurous.Importer
 
                             byte[] buffer = new byte[4096];
                             Stream zipStream = zipFile.GetInputStream(zipEntry);
-                            string fullFilePath = outputDirectory + this.outputPath + Path.GetFileName(RenameFile(entryFileName));
+                            string fileName = Path.GetFileName(RenameFile(entryFileName));
+                            string fullFilePath = Application.dataPath + this.outputPath + fileName;
 
                             // Unzip file in buffered chunks. This is just as
                             // fast as unpacking to a buffer the full size of
@@ -203,7 +206,7 @@ namespace Zigurous.Importer
                                 StreamUtils.Copy(zipStream, streamWriter, buffer);
                             }
 
-                            numFiles++;
+                            this.unzippedFiles.Add(fileName);
                         }
 
                         zipFile.IsStreamOwner = false;
@@ -225,8 +228,112 @@ namespace Zigurous.Importer
             mapName = mapName.Replace("Color", "Albedo");
             mapName = mapName.Replace("Metalness", "Metallic");
             mapName = mapName.Replace("AmbientOcclusion", "Occlusion");
-
             return assetName + "-" + mapName;
+        }
+
+        private void CreateMaterialAsset()
+        {
+            if (this.outputMaterial == null) {
+                return;
+            }
+
+            Log("Creating material...");
+
+            string outputPath = this.outputPath.StartsWith("Assets/") ? this.outputPath : "Assets/" + this.outputPath;
+            outputPath = outputPath.Replace("//", "/");
+
+            if (this.unzippedFiles != null)
+            {
+                foreach (string fileName in this.unzippedFiles)
+                {
+                    string filePath = outputPath + fileName;
+                    Texture2D texture = AssetDatabase.LoadAssetAtPath<Texture2D>(filePath);
+                    MapType mapType = MapTypeFromFileName(fileName);
+                    string mapName = MapTypeToTextureName(mapType);
+
+                    if (mapName != null) {
+                        this.outputMaterial.SetTexture(mapName, texture);
+                    }
+                }
+            }
+
+            string outputName = this.outputName != null && this.outputName.Length > 0 ? this.outputName : this.assetId;
+            string assetName = outputPath + outputName + ".mat";
+
+            AssetDatabase.CreateAsset(this.outputMaterial, assetName);
+            AssetDatabase.Refresh();
+        }
+
+        private MapType MapTypeFromFileName(string fileName)
+        {
+            if (fileName.Contains("Albedo")) {
+                return MapType.Albedo;
+            } else if (fileName.Contains("Normal")) {
+                return MapType.Normal;
+            } else if (fileName.Contains("Displacement")) {
+                return MapType.Displacement;
+            } else if (fileName.Contains("Roughness")) {
+                return MapType.Roughness;
+            } else if (fileName.Contains("Metallic")) {
+                return MapType.Metallic;
+            } else if (fileName.Contains("Occlusion")) {
+                return MapType.Occlusion;
+            } else if (fileName.Contains("Emission")) {
+                return MapType.Emission;
+            } else {
+                return MapType.None;
+            }
+        }
+
+        private string MapTypeToTextureName(MapType mapType)
+        {
+            switch (mapType)
+            {
+                case MapType.Albedo:
+                    return "_MainTex";
+                case MapType.Normal:
+                    return "_BumpMap";
+                case MapType.Displacement:
+                    return "_ParallaxMap";
+                case MapType.Roughness:
+                    return "_SpecGlossMap";
+                case MapType.Metallic:
+                    return "_MetallicGlossMap";
+                case MapType.Occlusion:
+                    return "_OcclusionMap";
+                case MapType.Emission:
+                    return "_EmissionMap";
+                default:
+                    return null;
+            }
+        }
+
+        private string ResolutionToString(Resolution resolution)
+        {
+            switch (resolution)
+            {
+                case Resolution._2K:
+                    return "2K";
+                case Resolution._4K:
+                    return "4K";
+                case Resolution._8K:
+                    return "8K";
+                default:
+                    return "2K";
+            }
+        }
+
+        private string FormatToString(Format format)
+        {
+            switch (format)
+            {
+                case Format.JPG:
+                    return "JPG";
+                case Format.PNG:
+                    return "PNG";
+                default:
+                    return "JPG";
+            }
         }
 
         private void Log(string message)
