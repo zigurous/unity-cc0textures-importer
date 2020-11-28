@@ -101,7 +101,7 @@ namespace Zigurous.Importer
 
         private async void DownloadZip(string link)
         {
-            Log("Downloading asset...");
+            Log("Downloading asset: " + this.assetId);
 
             await DownloadFile(
                 uri: link,
@@ -125,8 +125,6 @@ namespace Zigurous.Importer
 
         private void DownloadSuccess()
         {
-            Log("Importing asset...");
-
             if (!this.outputPath.EndsWith("/")) {
                 this.outputPath += "/";
             }
@@ -135,6 +133,8 @@ namespace Zigurous.Importer
             int removeIndex = zipFilePath.LastIndexOf("/Assets");
             zipFilePath = zipFilePath.Remove(removeIndex, "/Assets".Length);
             zipFilePath += "/CC0Textures.zip";
+
+            Log("Importing files from " + zipFilePath);
 
             UnzipFiles(zipFilePath);
             AssetDatabase.Refresh();
@@ -237,7 +237,7 @@ namespace Zigurous.Importer
                 return;
             }
 
-            Log("Creating material...");
+            Log("Creating new material");
 
             string outputPath = this.outputPath.StartsWith("Assets/") ? this.outputPath : "Assets/" + this.outputPath;
             outputPath = outputPath.Replace("//", "/");
