@@ -47,7 +47,7 @@ namespace Zigurous.Importer
         private Material outputMaterial;
         private List<string> unzippedFiles = new List<string>();
 
-        [MenuItem("Window/CC0Textures Importer")]
+        [MenuItem("Window/CC0 Textures Importer")]
         public static void ShowWindow()
         {
             EditorWindow.GetWindow(typeof(CC0TexturesImporter));
