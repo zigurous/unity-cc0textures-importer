@@ -43,7 +43,7 @@ namespace Zigurous.Importer
         private Resolution resolution = Resolution._2K;
         private Format format = Format.JPG;
         private string outputName;
-        private string outputPath = "/";
+        private string outputPath = "Assets/";
         private Material outputMaterial;
         private List<string> unzippedFiles = new List<string>();
 
@@ -185,6 +185,10 @@ namespace Zigurous.Importer
                 }
                 else
                 {
+                    string outputPath = this.outputPath.StartsWith("/") ? this.outputPath.Remove(0, 1) : this.outputPath;
+                    outputPath = outputPath.Replace("Assets/", "");
+                    outputPath = Application.dataPath + "/" + outputPath;
+
                     foreach (ZipEntry zipEntry in zipFile)
                     {
                         if (!zipEntry.IsFile) {
@@ -202,7 +206,8 @@ namespace Zigurous.Importer
                         byte[] buffer = new byte[4096];
                         Stream zipStream = zipFile.GetInputStream(zipEntry);
                         string fileName = Path.GetFileName(RenameFile(entryFileName));
-                        string fullFilePath = Application.dataPath + this.outputPath + fileName;
+                        string fullFilePath = outputPath + fileName;
+                        Debug.Log(fullFilePath);
 
                         // Unzip file in buffered chunks. This is just as
                         // fast as unpacking to a buffer the full size of
@@ -248,7 +253,8 @@ namespace Zigurous.Importer
 
             Log("Creating new material");
 
-            string outputPath = this.outputPath.StartsWith("Assets/") ? this.outputPath : "Assets/" + this.outputPath;
+            string outputPath = this.outputPath.StartsWith("/") ? this.outputPath.Remove(0, 1) : this.outputPath;
+            outputPath = outputPath.StartsWith("Assets") ? outputPath : "Assets/" + outputPath;
             outputPath = outputPath.Replace("//", "/");
 
             if (this.unzippedFiles != null)

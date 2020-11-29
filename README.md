@@ -8,7 +8,7 @@ Once the package is installed, access the import menu from `Window > CC0 Texture
 
 Find the asset id of the desired texture pack on the CC0 Textures website. Once you select an asset on the website, you can find the id in the url. For example, the asset url `https://cc0textures.com/view?id=Wood051` has the id **Wood051**.
 
-Enter the `Asset ID` into the text field in the Unity editor. Select your desired `Resolution` and file `Format` (be careful of large file sizes). Provide an optional `Output Name` if you want to rename the texture files from their original names. Provide an optional `Output Path`, relative to the `/Assets` directory.
+Enter the `Asset ID` into the text field in the Unity editor. Select your desired `Resolution` and file `Format` (be careful of large file sizes). Provide an optional `Output Name` if you want to rename the texture files from their original names. Provide an optional `Output Path`, relative to the project root.
 
 Click the `Import Textures` button then celebrate!
 
