@@ -27,6 +27,7 @@ namespace Zigurous.Importer
 
         public enum Resolution
         {
+            _1K,
             _2K,
             _4K,
             _8K
@@ -327,6 +328,8 @@ namespace Zigurous.Importer
         {
             switch (resolution)
             {
+                case Resolution._1K:
+                    return "1K";
                 case Resolution._2K:
                     return "2K";
                 case Resolution._4K:
