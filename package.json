@@ -1,7 +1,7 @@
 {
   "name": "com.zigurous.importer.cc0textures",
   "version": "0.1.0",
-  "displayName": "Zigurous CC0Textures Importer",
+  "displayName": "CC0Textures Importer",
   "description": "Import textures directly from CC0Textures.com.",
   "unity": "2019.4",
   "author": {
