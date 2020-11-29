@@ -136,24 +136,26 @@ namespace Zigurous.Importer
 
             Log("Importing files from " + zipFilePath);
 
-            UnzipFiles(zipFilePath);
-            AssetDatabase.Refresh();
+            if (UnzipFiles(zipFilePath))
+            {
+                AssetDatabase.Refresh();
 
-            if (this.outputMaterial != null) {
-                CreateMaterialAsset();
+                if (this.outputMaterial != null) {
+                    CreateMaterialAsset();
+                }
             }
 
             Log("Finished");
         }
 
-        private void UnzipFiles(string filePath)
+        private bool UnzipFiles(string filePath)
         {
             this.unzippedFiles.Clear();
 
             if (!System.IO.File.Exists(filePath))
             {
                 LogError("Zip file does not exist");
-                return;
+                return false;
             }
 
             FileStream fs = null;
@@ -162,62 +164,69 @@ namespace Zigurous.Importer
                 fs = new FileStream(filePath, FileMode.Open);
             } catch (Exception e) {
                 LogError(e.Message);
+                return false;
             }
 
-            if (fs != null)
+            if (fs == null) {
+                return false;
+            }
+
+            try
             {
-                try
+                ZipFile zipFile = new ZipFile(fs);
+
+                if (!zipFile.TestArchive(true))
                 {
-                    ZipFile zipFile = new ZipFile(fs);
-
-                    if (!zipFile.TestArchive(true))
+                    LogError("Zip file failed integrity check");
+                    zipFile.IsStreamOwner = false;
+                    zipFile.Close();
+                    fs.Close();
+                    return false;
+                }
+                else
+                {
+                    foreach (ZipEntry zipEntry in zipFile)
                     {
-                        LogError("Zip file failed integrity check");
-                        zipFile.IsStreamOwner = false;
-                        zipFile.Close();
-                        fs.Close();
-                    }
-                    else
-                    {
-                        foreach (ZipEntry zipEntry in zipFile)
-                        {
-                            if (!zipEntry.IsFile) {
-                                continue;
-                            }
-
-                            String entryFileName = zipEntry.Name;
-
-                            if (entryFileName.Contains("DS_Store")) {
-                                continue;
-                            }
-
-                            Log("Unpacking zip file entry: " + entryFileName);
-
-                            byte[] buffer = new byte[4096];
-                            Stream zipStream = zipFile.GetInputStream(zipEntry);
-                            string fileName = Path.GetFileName(RenameFile(entryFileName));
-                            string fullFilePath = Application.dataPath + this.outputPath + fileName;
-
-                            // Unzip file in buffered chunks. This is just as
-                            // fast as unpacking to a buffer the full size of
-                            // the file, but does not waste memory. The "using"
-                            // will close the stream even if an exception occurs.
-                            using (FileStream streamWriter = File.Create(fullFilePath)) {
-                                StreamUtils.Copy(zipStream, streamWriter, buffer);
-                            }
-
-                            this.unzippedFiles.Add(fileName);
+                        if (!zipEntry.IsFile) {
+                            continue;
                         }
 
-                        zipFile.IsStreamOwner = false;
-                        zipFile.Close();
-                        fs.Close();
+                        String entryFileName = zipEntry.Name;
+
+                        if (entryFileName.Contains("DS_Store")) {
+                            continue;
+                        }
+
+                        Log("Unpacking zip file entry: " + entryFileName);
+
+                        byte[] buffer = new byte[4096];
+                        Stream zipStream = zipFile.GetInputStream(zipEntry);
+                        string fileName = Path.GetFileName(RenameFile(entryFileName));
+                        string fullFilePath = Application.dataPath + this.outputPath + fileName;
+
+                        // Unzip file in buffered chunks. This is just as
+                        // fast as unpacking to a buffer the full size of
+                        // the file, but does not waste memory. The "using"
+                        // will close the stream even if an exception occurs.
+                        using (FileStream streamWriter = File.Create(fullFilePath)) {
+                            StreamUtils.Copy(zipStream, streamWriter, buffer);
+                        }
+
+                        this.unzippedFiles.Add(fileName);
                     }
-                }
-                catch (Exception e) {
-                    LogError(e.Message);
+
+                    zipFile.IsStreamOwner = false;
+                    zipFile.Close();
+                    fs.Close();
                 }
             }
+            catch (Exception e)
+            {
+                LogError(e.Message);
+                return false;
+            }
+
+            return true;
         }
 
         private string RenameFile(string fileName)
