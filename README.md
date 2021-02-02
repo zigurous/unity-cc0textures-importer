@@ -2,6 +2,18 @@
 
 This package allows you to import textures directly from [cc0textures.com](https://cc0textures.com/) into Unity. This is made possible by utilizing the [CC0 Textures API](https://help.cc0textures.com/doku.php?id=api_v1:start).
 
+## Installation
+
+The Unity Package Manager can load a package from a Git repository on a remote server.
+
+To load a package from a Git URL:
+
+1. Open the Package Manager window
+2. Click the add (`+`) button in the status bar
+3. Select **Add package from git URL** from the add menu
+4. Enter the following Git URL in the text box and click Add:
+   `https://github.com/zigurous/unity-cc0textures-importer.git`
+
 ## Instructions
 
 Once the package is installed, access the import menu from `Window > CC0 Textures Importer`.
