@@ -40,7 +40,6 @@ namespace Zigurous.Importer.CC0Textures
             EditorGUILayout.EndFoldoutHeaderGroup();
             EditorGUILayout.Space();
             EditorGUILayout.Space();
-
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
 
@@ -52,7 +51,6 @@ namespace Zigurous.Importer.CC0Textures
 
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
-
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
 
@@ -89,8 +87,25 @@ namespace Zigurous.Importer.CC0Textures
                 return;
             }
 
+            // Refresh the assets so we can update any import settings and/or
+            // assign textures to a new material
             AssetDatabase.Refresh();
 
+            // Find the normal map and change the texture type import settings
+            foreach (string fileName in files)
+            {
+                if (fileName.Contains("Normal"))
+                {
+                    string filePath = GetAssetPath(fileName);
+                    TextureImporter importer = AssetImporter.GetAtPath(filePath) as TextureImporter;
+                    importer.textureType = TextureImporterType.NormalMap;
+                    AssetDatabase.WriteImportSettingsIfDirty(filePath);
+                    AssetDatabase.Refresh();
+                    break;
+                }
+            }
+
+            // Create a new material with the imported texture files
             if (this.outputMaterial) {
                 CreateMaterialAsset(files);
             }
@@ -102,18 +117,16 @@ namespace Zigurous.Importer.CC0Textures
         {
             Log.Message("Creating new material");
 
+            // Create a new material from the prefab or use Unity's default
+            // standard shader material
             Material material = this.materialPrefab ?
                 new Material(this.materialPrefab) :
                 new Material(Shader.Find("Standard"));
 
-            string outputPath = this.outputPath.StartsWith("/") ? this.outputPath.Remove(0, 1) : this.outputPath;
-            outputPath = outputPath.StartsWith("Assets") ? outputPath : "Assets/" + outputPath;
-            outputPath = outputPath.Replace("//", "/");
-
+            // Assign each texture map to the right slot in the material
             foreach (string fileName in files)
             {
-                string filePath = outputPath + fileName;
-                Texture2D texture = AssetDatabase.LoadAssetAtPath<Texture2D>(filePath);
+                Texture2D texture = LoadTexture(fileName);
                 TextureMapType mapType = fileName.ToTextureMapType();
                 string mapName = mapType.ToTextureName();
 
@@ -122,11 +135,25 @@ namespace Zigurous.Importer.CC0Textures
                 }
             }
 
+            // Save the material as an asset and refresh
             string outputName = this.outputName != null && this.outputName.Length > 0 ? this.outputName : this.assetId;
             string assetName = outputPath + outputName + ".mat";
-
             AssetDatabase.CreateAsset(material, assetName);
             AssetDatabase.Refresh();
+        }
+
+        private Texture2D LoadTexture(string fileName)
+        {
+            string filePath = GetAssetPath(fileName);
+            return AssetDatabase.LoadAssetAtPath<Texture2D>(filePath);
+        }
+
+        private string GetAssetPath(string fileName)
+        {
+            string outputPath = this.outputPath.StartsWith("/") ? this.outputPath.Remove(0, 1) : this.outputPath;
+            outputPath = outputPath.StartsWith("Assets") ? outputPath : "Assets/" + outputPath;
+            outputPath = outputPath.Replace("//", "/");
+            return outputPath + fileName;
         }
 
     }

@@ -14,20 +14,25 @@ namespace Zigurous.Importer.CC0Textures
 
         public static async void DownloadAsset(string assetId, TextureResolution resolution, ImageFormat format, string outputPath, string outputName, Action<List<string>> onComplete)
         {
-            string downloadLink = String.Format(
-                format: "https://cc0textures.com/get?file={0}_{1}-{2}.zip",
-                arg0: assetId,
-                arg1: resolution.GetName(),
-                arg2: format.GetName());
-
             try
             {
+                // Construct the full download link to the asset
+                string downloadLink = String.Format(
+                    format: "https://cc0textures.com/get?file={0}_{1}-{2}.zip",
+                    arg0: assetId,
+                    arg1: resolution.GetName(),
+                    arg2: format.GetName());
+
+                // Wait for the zip file to be downloaded
                 Log.Message("Downloading asset: " + assetId);
                 await client.DownloadFileTaskAsync(downloadLink, "CC0Textures.zip");
 
+                // Extract the files from the zip
                 string zip = GetZipFilePath();
                 Log.Message("Importing files from " + zip);
                 List<string> files = UnzipFiles(zip, outputPath, outputName);
+
+                // Cleanup resources and complete download
                 System.IO.File.Delete(zip);
                 onComplete(files);
             }
@@ -73,6 +78,7 @@ namespace Zigurous.Importer.CC0Textures
                 else
                 {
                     List<string> unzippedFiles = new List<string>();
+
                     string dataPath = outputPath.StartsWith("/") ? outputPath.Remove(0, 1) : outputPath;
                     dataPath = dataPath.Replace("Assets/", "");
                     dataPath = Application.dataPath + "/" + dataPath;
