@@ -1,6 +1,6 @@
 # CC0 Textures Importer
 
-This package allows you to import textures directly from [cc0textures.com](https://cc0textures.com/) into Unity by utilizing the [CC0 Textures API](https://help.cc0textures.com/doku.php?id=api_v1:start).
+The CC0 Textures Importer package provides a Unity editor integration for importing textures and materials directly from [cc0textures.com](https://cc0textures.com/) by utilizing the public [CC0 Textures API](https://help.cc0textures.com/doku.php?id=api_v1:start).
 
 ## Installation
 
