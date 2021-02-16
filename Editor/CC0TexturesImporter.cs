@@ -26,16 +26,18 @@ namespace Zigurous.Importer.CC0Textures
 
         private void OnGUI()
         {
+            EditorGUI.indentLevel = 1;
+
             this.showRequired = EditorGUILayout.BeginFoldoutHeaderGroup(this.showRequired, "Required");
             if (this.showRequired)
             {
                 this.assetId = EditorGUILayout.TextField("Asset ID", this.assetId);
                 this.resolution = (TextureResolution)EditorGUILayout.EnumPopup("Resolution", this.resolution);
                 this.format = (ImageFormat)EditorGUILayout.EnumPopup("Format", this.format);
+                EditorGUILayout.Space();
             }
 
             EditorGUILayout.EndFoldoutHeaderGroup();
-            EditorGUILayout.Space();
 
             this.showOptional = EditorGUILayout.BeginFoldoutHeaderGroup(this.showOptional, "Optional");
             if (this.showOptional)
@@ -46,6 +48,8 @@ namespace Zigurous.Importer.CC0Textures
             }
 
             EditorGUILayout.EndFoldoutHeaderGroup();
+            EditorGUI.indentLevel = 0;
+
             EditorGUILayout.Space(20.0f);
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
@@ -58,6 +62,7 @@ namespace Zigurous.Importer.CC0Textures
 
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
+
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
 
