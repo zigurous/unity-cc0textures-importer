@@ -9,6 +9,7 @@ namespace Zigurous.Importer.CC0Textures
         private string assetId;
         private TextureResolution resolution = TextureResolution._2K;
         private ImageFormat format = ImageFormat.JPG;
+        private Material materialPrefab;
 
         private string outputName;
         private string outputPath = "Assets/";
@@ -33,9 +34,11 @@ namespace Zigurous.Importer.CC0Textures
                 this.format = (ImageFormat)EditorGUILayout.EnumPopup("Format", this.format);
                 this.outputName = EditorGUILayout.TextField("Output Name", this.outputName);
                 this.outputPath = EditorGUILayout.TextField("Output Path", this.outputPath);
+                this.materialPrefab = (Material)EditorGUILayout.ObjectField("Material Prefab", this.materialPrefab, typeof(Material), true);
             }
 
             EditorGUILayout.EndFoldoutHeaderGroup();
+            EditorGUILayout.Space();
             EditorGUILayout.Space();
 
             EditorGUILayout.BeginHorizontal();
@@ -99,7 +102,9 @@ namespace Zigurous.Importer.CC0Textures
         {
             Log.Message("Creating new material");
 
-            Material material = new Material(Shader.Find("Standard"));
+            Material material = this.materialPrefab ?
+                new Material(this.materialPrefab) :
+                new Material(Shader.Find("Standard"));
 
             string outputPath = this.outputPath.StartsWith("/") ? this.outputPath.Remove(0, 1) : this.outputPath;
             outputPath = outputPath.StartsWith("Assets") ? outputPath : "Assets/" + outputPath;
@@ -107,7 +112,6 @@ namespace Zigurous.Importer.CC0Textures
 
             foreach (string fileName in files)
             {
-                Debug.Log(fileName);
                 string filePath = outputPath + fileName;
                 Texture2D texture = AssetDatabase.LoadAssetAtPath<Texture2D>(filePath);
                 TextureMapType mapType = fileName.ToTextureMapType();
