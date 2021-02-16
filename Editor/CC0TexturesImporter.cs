@@ -15,7 +15,8 @@ namespace Zigurous.Importer.CC0Textures
         private string outputPath = "Assets/";
         private bool outputMaterial = false;
 
-        private bool fold = true;
+        private bool showRequired = true;
+        private bool showOptional = true;
 
         [MenuItem("Window/CC0Textures Importer")]
         public static void ShowWindow()
@@ -25,21 +26,27 @@ namespace Zigurous.Importer.CC0Textures
 
         private void OnGUI()
         {
-            this.fold = EditorGUILayout.BeginFoldoutHeaderGroup(this.fold, "Import Settings");
-
-            if (this.fold)
+            this.showRequired = EditorGUILayout.BeginFoldoutHeaderGroup(this.showRequired, "Required");
+            if (this.showRequired)
             {
                 this.assetId = EditorGUILayout.TextField("Asset ID", this.assetId);
                 this.resolution = (TextureResolution)EditorGUILayout.EnumPopup("Resolution", this.resolution);
                 this.format = (ImageFormat)EditorGUILayout.EnumPopup("Format", this.format);
+            }
+
+            EditorGUILayout.EndFoldoutHeaderGroup();
+            EditorGUILayout.Space();
+
+            this.showOptional = EditorGUILayout.BeginFoldoutHeaderGroup(this.showOptional, "Optional");
+            if (this.showOptional)
+            {
                 this.outputName = EditorGUILayout.TextField("Output Name", this.outputName);
                 this.outputPath = EditorGUILayout.TextField("Output Path", this.outputPath);
                 this.materialPrefab = (Material)EditorGUILayout.ObjectField("Material Prefab", this.materialPrefab, typeof(Material), true);
             }
 
             EditorGUILayout.EndFoldoutHeaderGroup();
-            EditorGUILayout.Space();
-            EditorGUILayout.Space();
+            EditorGUILayout.Space(20.0f);
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
 
