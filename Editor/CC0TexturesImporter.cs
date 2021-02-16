@@ -18,10 +18,10 @@ namespace Zigurous.Importer.CC0Textures
         private bool showRequired = true;
         private bool showOptional = true;
 
-        [MenuItem("Window/CC0Textures Importer")]
+        [MenuItem("Window/CC0 Textures Importer")]
         public static void ShowWindow()
         {
-            EditorWindow.GetWindow(typeof(CC0TexturesImporter), false, "CC0Textures Importer");
+            EditorWindow.GetWindow(typeof(CC0TexturesImporter), false, "CC0 Textures Importer");
         }
 
         private void OnGUI()
