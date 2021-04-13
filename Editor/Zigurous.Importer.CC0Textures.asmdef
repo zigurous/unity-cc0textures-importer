@@ -1,7 +1,9 @@
-﻿{
+{
     "name": "Zigurous.Importer.CC0Textures",
     "references": [],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
