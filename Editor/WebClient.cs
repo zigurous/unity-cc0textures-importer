@@ -18,14 +18,14 @@ namespace Zigurous.Importer.CC0Textures
             {
                 // Construct the full download link to the asset
                 string downloadLink = String.Format(
-                    format: "https://cc0textures.com/get?file={0}_{1}-{2}.zip",
+                    format: "https://ambientcg.com/get?file={0}_{1}-{2}.zip",
                     arg0: assetId,
                     arg1: resolution.GetName(),
                     arg2: format.GetName());
 
                 // Wait for the zip file to be downloaded
                 Log.Message("Downloading asset: " + assetId);
-                await client.DownloadFileTaskAsync(downloadLink, "CC0Textures.zip");
+                await client.DownloadFileTaskAsync(downloadLink, "textures.zip");
 
                 // Extract the files from the zip
                 string zip = GetZipFilePath();
@@ -148,7 +148,7 @@ namespace Zigurous.Importer.CC0Textures
             string path = Application.dataPath;
             int removeIndex = path.LastIndexOf("/Assets");
             path = path.Remove(removeIndex, "/Assets".Length);
-            path += "/CC0Textures.zip";
+            path += "/textures.zip";
             return path;
         }
 

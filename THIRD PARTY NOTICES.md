@@ -1,10 +1,10 @@
 This package contains third-party software components governed by the license(s) indicated below:
 
-Component Name: CC0 Textures
+Component Name: ambientCG
 
-License Type: "Creative Commons CC0 License"
+License Type: "Creative Commons CC0 1.0 Universal License"
 
-[CC0 Textures License](https://help.cc0textures.com/doku.php?id=website:license)
+[ambientCG License](https://help.ambientcg.com/01-General/Licensing.html)
 
 Component Name: SharpZipLib
 

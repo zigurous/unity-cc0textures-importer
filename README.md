@@ -1,6 +1,6 @@
 # CC0 Textures Importer
 
-The CC0 Textures Importer package provides a Unity editor integration for importing textures and materials directly from [cc0textures.com](https://cc0textures.com/) by utilizing the public [CC0 Textures API](https://help.cc0textures.com/doku.php?id=api_v1:start).
+The CC0 Textures Importer package provides a Unity editor integration for importing textures and materials directly from [ambientcg.com](https://ambientcg.com/) by utilizing their public [API](https://help.ambientcg.com/04-API/API_v2.html).
 
 ## Installation
 
@@ -18,7 +18,7 @@ To load a package from a Git URL:
 
 Once the package is installed, access the import menu from `Window > CC0 Textures Importer`.
 
-Find the asset id of the desired texture pack on the CC0 Textures website. Once you select an asset on the website, you can find the id in the url. For example, the asset url `https://cc0textures.com/view?id=Wood051` has the id **Wood051**.
+Find the asset id of the desired texture pack on the CC0 Textures website. Once you select an asset on the website, you can find the id in the url. For example, the asset url `https://ambientcg.com/view?id=Wood051` has the id **Wood051**.
 
 Enter the `Asset ID` into the text field in the Unity editor. Select your desired `Resolution` and image `Format` (be careful of large file sizes). Provide an optional `Output Name` if you want to rename the texture files from their original names. Provide an optional `Output Path` relative to the root project folder.
 
@@ -30,4 +30,4 @@ Alternatively, click the `Import Material` button if you want the textures to be
 
 ## Asset Licensing
 
-All assets by CC0 Textures are provided under the **Creative Commons CC0 License** (public domain). Read the [license details](https://help.cc0textures.com/doku.php?id=website:license) for more information.
+All assets by ambientCG are provided under the **Creative Commons CC0 1.0 Universal License**. Read the [license details](https://help.ambientcg.com/01-General/Licensing.html) for more information.
