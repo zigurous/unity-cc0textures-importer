@@ -1,18 +1,26 @@
 # CC0 Textures Importer
 
-The CC0 Textures Importer package provides a Unity editor integration for importing textures and materials directly from [ambientcg.com](https://ambientcg.com/) by utilizing their public [API](https://help.ambientcg.com/04-API/API_v2.html).
+[![](https://img.shields.io/badge/github-repo-blue?logo=github)](https://github.com/zigurous/unity-cc0textures-importer) [![](https://img.shields.io/github/package-json/v/zigurous/unity-cc0textures-importer)](https://github.com/zigurous/unity-cc0textures-importer/releases) [![](https://img.shields.io/github/license/zigurous/unity-cc0textures-importer)](https://github.com/zigurous/unity-cc0textures-importer/blob/main/LICENSE.md)
+
+The CC0 Textures Importer package provides a Unity editor integration for importing textures and materials directly from [ambientcg.com](https://ambientcg.com/) by utilizing their [public API](https://help.ambientcg.com/04-API/API_v2.html).
 
 ## Installation
 
-The Unity Package Manager can load a package from a Git repository on a remote server.
+Use the Unity [Package Manager](https://docs.unity3d.com/Manual/upm-ui.html) to install the CC0 Textures Importer package.
 
-To load a package from a Git URL:
-
-1. Open the Package Manager window
+1. Open the Package Manager in `Window > Package Manager`
 2. Click the add (`+`) button in the status bar
-3. Select **Add package from git URL** from the add menu
+3. Select `Add package from git URL` from the add menu
 4. Enter the following Git URL in the text box and click Add:
-   `https://github.com/zigurous/unity-cc0textures-importer.git`
+
+```http
+https://github.com/zigurous/unity-cc0textures-importer.git
+```
+
+For more information on the Package Manager and installing packages, see the following pages:
+
+- [Unity's Package Manager](https://docs.unity3d.com/Manual/Packages.html)
+- [Installing from a Git URL](https://docs.unity3d.com/Manual/upm-ui-giturl.html)
 
 ## Instructions
 
