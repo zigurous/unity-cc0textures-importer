@@ -50,11 +50,11 @@ namespace Zigurous.Importer.CC0Textures
             EditorGUILayout.EndFoldoutHeaderGroup();
             EditorGUI.indentLevel = 0;
 
-            EditorGUILayout.Space(20.0f);
+            EditorGUILayout.Space(20f);
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
 
-            if (GUILayout.Button("Import Textures", GUILayout.Width(200.0f), GUILayout.Height(25.0f)))
+            if (GUILayout.Button("Import Textures", GUILayout.Width(200f), GUILayout.Height(25f)))
             {
                 this.outputMaterial = false;
                 Import();
@@ -66,7 +66,7 @@ namespace Zigurous.Importer.CC0Textures
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
 
-            if (GUILayout.Button("Import Material", GUILayout.Width(200.0f), GUILayout.Height(25.0f)))
+            if (GUILayout.Button("Import Material", GUILayout.Width(200f), GUILayout.Height(25f)))
             {
                 this.outputMaterial = true;
                 Import();
