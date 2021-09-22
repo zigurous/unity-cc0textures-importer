@@ -4,13 +4,13 @@
   "displayName": "CC0 Textures Importer",
   "description": "The CC0 Textures Importer package provides an editor integration for importing textures and materials directly from ambientcg.com (formerly cc0textures.com).\n\nTexture Maps:\n\u2022 Albedo\n\u2022 Normal\n\u2022 Displacement\n\u2022 Roughness\n\u2022 Metallic\n\u2022 Occlusion\n\u2022 Emission\n\nTexture Resolutions:\n\u2022 1K\n\u2022 2K\n\u2022 4K\n\u2022 8K\n\u2022 16K\n\nImage Formats:\n\u2022 JPG\n\u2022 PNG",
   "unity": "2019.4",
+  "repository": "https://github.com/zigurous/unity-cc0textures-importer",
   "keywords": [
     "importer",
     "editor",
     "textures",
     "materials"
   ],
-  "repository": "https://github.com/zigurous/unity-cc0textures-importer",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/@zigurous"
   },
