@@ -762,7 +762,6 @@ namespace ICSharpCode.SharpZipLib.Zip
 				throw new ObjectDisposedException("ZipFile");
 			}
 
-			// TODO: This will be slow as the next ice age for huge archives!
 			for (int i = 0; i < entries_.Length; i++)
 			{
 				if (string.Compare(name, entries_[i].Name, ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal) == 0)
@@ -1034,9 +1033,6 @@ namespace ICSharpCode.SharpZipLib.Zip
 					status.SetOperation(TestOperation.MiscellaneousTests);
 					resultHandler(status, null);
 				}
-
-				// TODO: the 'Corrina Johns' test where local headers are missing from
-				// the central directory.  They are therefore invisible to many archivers.
 			}
 			catch (Exception ex)
 			{
@@ -1078,7 +1074,7 @@ namespace ICSharpCode.SharpZipLib.Zip
 				bool testData = (tests & HeaderTest.Extract) != 0;
 
 				var entryAbsOffset = offsetOfFirstEntry + entry.Offset;
-				
+
 				baseStream_.Seek(entryAbsOffset, SeekOrigin.Begin);
 				var signature = (int)ReadLEUint();
 
@@ -1268,8 +1264,6 @@ namespace ICSharpCode.SharpZipLib.Zip
 						}
 					}
 
-					// TODO: make test more correct...  can't compare lengths as was done originally as this can fail for MBCS strings
-					// Assuming a code page at this point is not valid?  Best is to store the name length in the ZipEntry probably
 					if (entry.Name.Length > storedNameLength)
 					{
 						throw new ZipException("File name length mismatch");
@@ -2051,10 +2045,8 @@ namespace ICSharpCode.SharpZipLib.Zip
 		{
 			ZipEntry entry = update.OutEntry;
 
-			// TODO: Local offset will require adjusting for multi-disk zip files.
 			entry.Offset = baseStream_.Position;
 
-			// TODO: Need to clear any entry flags that dont make sense or throw an exception here.
 			if (update.Command != UpdateCommand.Copy)
 			{
 				if (entry.CompressionMethod == CompressionMethod.Deflated)
@@ -2480,15 +2472,15 @@ namespace ICSharpCode.SharpZipLib.Zip
 		/// <returns>The descriptor size, zero if there isn't one.</returns>
 		private int GetDescriptorSize(ZipUpdate update, bool includingSignature)
 		{
-			if (!((GeneralBitFlags)update.Entry.Flags).HasFlag(GeneralBitFlags.Descriptor)) 
+			if (!((GeneralBitFlags)update.Entry.Flags).HasFlag(GeneralBitFlags.Descriptor))
 				return 0;
-			
-			var descriptorWithSignature = update.Entry.LocalHeaderRequiresZip64 
-				? ZipConstants.Zip64DataDescriptorSize 
+
+			var descriptorWithSignature = update.Entry.LocalHeaderRequiresZip64
+				? ZipConstants.Zip64DataDescriptorSize
 				: ZipConstants.DataDescriptorSize;
 
-			return includingSignature 
-				? descriptorWithSignature 
+			return includingSignature
+				? descriptorWithSignature
 				: descriptorWithSignature - sizeof(int);
 		}
 
@@ -2736,7 +2728,6 @@ namespace ICSharpCode.SharpZipLib.Zip
 			workFile.WriteLocalEntryHeader(update);
 			long dataStart = workFile.baseStream_.Position;
 
-			// TODO: This is slow if the changes don't effect the data!!
 			if (update.Entry.IsFile && (update.Filename != null))
 			{
 				using (Stream output = workFile.GetOutputStream(update.OutEntry))
@@ -2767,14 +2758,10 @@ namespace ICSharpCode.SharpZipLib.Zip
 
 			const int NameLengthOffset = 26;
 
-			// TODO: Add base for SFX friendly handling
 			long entryDataOffset = update.Entry.Offset + NameLengthOffset;
 
 			baseStream_.Seek(entryDataOffset, SeekOrigin.Begin);
 
-			// Clumsy way of handling retrieving the original name and extra data length for now.
-			// TODO: Stop re-reading name and data length in CopyEntryDirect.
-			
 			uint nameLength = ReadLEUshort();
 			uint extraLength = ReadLEUshort();
 
@@ -2823,7 +2810,6 @@ namespace ICSharpCode.SharpZipLib.Zip
 
 				long entryDataOffset = update.Entry.Offset + NameLengthOffset;
 
-				// TODO: This wont work for SFX files!
 				baseStream_.Seek(entryDataOffset, SeekOrigin.Begin);
 
 				uint nameLength = ReadLEUshort();
@@ -2874,13 +2860,6 @@ namespace ICSharpCode.SharpZipLib.Zip
 			{
 				if (archiveStorage_.UpdateMode == FileUpdateMode.Direct)
 				{
-					// TODO: archiveStorage wasnt originally intended for this use.
-					// Need to revisit this to tidy up handling as archive storage currently doesnt
-					// handle the original stream well.
-					// The problem is when using an existing zip archive with an in memory archive storage.
-					// The open stream wont support writing but the memory storage should open the same file not an in memory one.
-
-					// Need to tidy up the archive storage interface and contract basically.
 					baseStream_ = archiveStorage_.OpenForDirectUpdate(baseStream_);
 					updateFile = new ZipHelperStream(baseStream_);
 				}
@@ -3036,7 +3015,6 @@ namespace ICSharpCode.SharpZipLib.Zip
 								break;
 
 							case UpdateCommand.Modify:
-								// TODO: Direct modifying of an entry will take some legwork.
 								ModifyEntry(workFile, update);
 								break;
 
@@ -3551,7 +3529,6 @@ namespace ICSharpCode.SharpZipLib.Zip
 			// Or are appended as a resource to an executable.
 			// Zip files created by some archivers have the offsets altered to reflect the true offsets
 			// and so dont require any adjustment here...
-			// TODO: Difficulty with Zip64 and SFX offset handling needs resolution - maths?
 			if (!isZip64 && (offsetOfCentralDir < locatedEndOfCentralDir - (4 + (long)centralDirSize)))
 			{
 				offsetOfFirstEntry = locatedEndOfCentralDir - (4 + (long)centralDirSize + offsetOfCentralDir);

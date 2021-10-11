@@ -102,7 +102,6 @@ namespace ICSharpCode.SharpZipLib.Zip
 		/// </exception>
 		public void SetComment(string comment)
 		{
-			// TODO: Its not yet clear how to handle unicode comments here.
 			byte[] commentBytes = ZipStrings.ConvertToArray(comment);
 			if (commentBytes.Length > 0xffff)
 			{
@@ -356,7 +355,6 @@ namespace ICSharpCode.SharpZipLib.Zip
 			WriteLeShort((byte)entry.CompressionMethodForHeader);
 			WriteLeInt((int)entry.DosTime);
 
-			// TODO: Refactor header writing.  Its done in several places.
 			if (headerInfoAvailable)
 			{
 				WriteLeInt((int)entry.Crc);
@@ -934,7 +932,7 @@ namespace ICSharpCode.SharpZipLib.Zip
 			if(curMethod == CompressionMethod.Stored)
 			{
 				baseOutputStream_.Flush();
-			} 
+			}
 			else
 			{
 				base.Flush();

@@ -91,7 +91,6 @@ namespace ICSharpCode.SharpZipLib.Tar
 		{
 			get
 			{
-				// TODO: Check for invalid state? -NM 2018-07-01
 				return headers;
 			}
 		}

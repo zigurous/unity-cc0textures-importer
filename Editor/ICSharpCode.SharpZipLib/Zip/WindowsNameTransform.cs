@@ -221,7 +221,6 @@ namespace ICSharpCode.SharpZipLib.Zip
 			}
 
 			// Check for names greater than MaxPath characters.
-			// TODO: Were is CLR version of MaxPath defined?  Can't find it in Environment.
 			if (name.Length > MaxPath)
 			{
 				throw new PathTooLongException();

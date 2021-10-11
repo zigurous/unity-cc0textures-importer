@@ -596,7 +596,7 @@ namespace ICSharpCode.SharpZipLib.Tar
 		/// <param name="destinationDirectory">
 		/// The destination directory into which to extract.
 		/// </param>
-		public void ExtractContents(string destinationDirectory) 
+		public void ExtractContents(string destinationDirectory)
 			=> ExtractContents(destinationDirectory, false);
 
 		/// <summary>
@@ -978,10 +978,6 @@ namespace ICSharpCode.SharpZipLib.Tar
 			}
 		}
 
-		// TODO: TarArchive - Is there a better way to test for a text file?
-		// It no longer reads entire files into memory but is still a weak test!
-		// This assumes that byte values 0-7, 14-31 or 255 are binary
-		// and that all non text files contain one of these values
 		private static bool IsBinary(string filename)
 		{
 			using (FileStream fs = File.OpenRead(filename))

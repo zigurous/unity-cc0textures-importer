@@ -663,8 +663,6 @@ namespace ICSharpCode.SharpZipLib.Zip
 						trueCompressedSize += (ulong)this.EncryptionOverheadSize;
 					}
 
-					// TODO: A better estimation of the true limit based on compression overhead should be used
-					// to determine when an entry should use Zip64.
 					result =
 						((this.size >= uint.MaxValue) || (trueCompressedSize >= uint.MaxValue)) &&
 						((versionToExtract == 0) || (versionToExtract >= ZipConstants.VersionZip64));
@@ -911,8 +909,6 @@ namespace ICSharpCode.SharpZipLib.Zip
 		{
 			get
 			{
-				// TODO: This is slightly safer but less efficient.  Think about whether it should change.
-				//				return (byte[]) extra.Clone();
 				return extra;
 			}
 

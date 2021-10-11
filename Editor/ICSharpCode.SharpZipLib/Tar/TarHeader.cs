@@ -980,7 +980,6 @@ namespace ICSharpCode.SharpZipLib.Tar
 		/// <returns>
 		/// The index of the next free byte in the buffer
 		/// </returns>
-		/// TODO: what should be default behavior?(omit upper byte or UTF8?)
 		[Obsolete("No Encoding for Name field is specified, any non-ASCII bytes will be discarded")]
 		public static int GetNameBytes(StringBuilder name, byte[] buffer, int offset, int length)
 		{
@@ -1030,7 +1029,6 @@ namespace ICSharpCode.SharpZipLib.Tar
 		/// <param name="offset">The offset into the buffer from which to start adding</param>
 		/// <param name="length">The number of header bytes to add</param>
 		/// <returns>The index of the next free byte in the buffer</returns>
-		/// TODO: what should be default behavior?(omit upper byte or UTF8?)
 		[Obsolete("No Encoding for Name field is specified, any non-ASCII bytes will be discarded")]
 		public static int GetNameBytes(string name, byte[] buffer, int offset, int length)
 		{

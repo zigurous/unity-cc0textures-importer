@@ -877,7 +877,6 @@ namespace ICSharpCode.SharpZipLib.Zip.Compression
 		/// </returns>
 		public int RemainingInput
 		{
-			// TODO: This should be a long?
 			get
 			{
 				return input.AvailableBytes;

@@ -376,10 +376,6 @@ namespace ICSharpCode.SharpZipLib.Tar
 		/// </param>
 		public void Skip(long skipCount)
 		{
-			// TODO: REVIEW efficiency of TarInputStream.Skip
-			// This is horribly inefficient, but it ensures that we
-			// properly skip over bytes via the TarBuffer...
-			//
 			byte[] skipBuf = new byte[8 * 1024];
 
 			for (long num = skipCount; num > 0;)
@@ -546,7 +542,6 @@ namespace ICSharpCode.SharpZipLib.Tar
 					}
 					else if (header.TypeFlag == TarHeader.LF_GNU_VOLHDR)
 					{
-						// TODO: could show volume name when verbose
 						SkipToNextEntry();
 						headerBuf = this.tarBuffer.ReadBlock();
 					}
@@ -578,8 +573,6 @@ namespace ICSharpCode.SharpZipLib.Tar
 					// so this is not done anymore.
 
 					entryOffset = 0;
-
-					// TODO: Review How do we resolve this discrepancy?!
 					entrySize = this.currentEntry.Size;
 				}
 				catch (InvalidHeaderException ex)
