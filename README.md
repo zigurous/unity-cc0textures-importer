@@ -19,7 +19,7 @@ https://github.com/zigurous/unity-cc0textures-importer.git
 
 ## Instructions
 
-Once the package is installed, access the import menu from `Window > CC0 Textures Importer`.
+Once the package is installed, access the import menu from `Tools > CC0 Textures Importer`.
 
 Find the asset id of the desired texture pack on the CC0 Textures website. Once you select an asset on the website, you can find the id in the url. For example, the asset url `https://ambientcg.com/view?id=Wood051` has the id **Wood051**.
 
