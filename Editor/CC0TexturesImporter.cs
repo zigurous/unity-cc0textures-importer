@@ -28,23 +28,25 @@ namespace Zigurous.Importer.CC0Textures
         {
             EditorGUI.indentLevel = 1;
 
-            this.showRequired = EditorGUILayout.BeginFoldoutHeaderGroup(this.showRequired, "Required");
-            if (this.showRequired)
+            showRequired = EditorGUILayout.BeginFoldoutHeaderGroup(showRequired, "Required");
+
+            if (showRequired)
             {
-                this.assetId = EditorGUILayout.TextField("Asset ID", this.assetId);
-                this.resolution = (TextureResolution)EditorGUILayout.EnumPopup("Resolution", this.resolution);
-                this.format = (ImageFormat)EditorGUILayout.EnumPopup("Format", this.format);
+                assetId = EditorGUILayout.TextField("Asset ID", assetId);
+                resolution = (TextureResolution)EditorGUILayout.EnumPopup("Resolution", resolution);
+                format = (ImageFormat)EditorGUILayout.EnumPopup("Format", format);
                 EditorGUILayout.Space();
             }
 
             EditorGUILayout.EndFoldoutHeaderGroup();
 
-            this.showOptional = EditorGUILayout.BeginFoldoutHeaderGroup(this.showOptional, "Optional");
-            if (this.showOptional)
+            showOptional = EditorGUILayout.BeginFoldoutHeaderGroup(showOptional, "Optional");
+
+            if (showOptional)
             {
-                this.outputName = EditorGUILayout.TextField("Output Name", this.outputName);
-                this.outputPath = EditorGUILayout.TextField("Output Path", this.outputPath);
-                this.materialPrefab = (Material)EditorGUILayout.ObjectField("Material Prefab", this.materialPrefab, typeof(Material), true);
+                outputName = EditorGUILayout.TextField("Output Name", outputName);
+                outputPath = EditorGUILayout.TextField("Output Path", outputPath);
+                materialPrefab = (Material)EditorGUILayout.ObjectField("Material Prefab", materialPrefab, typeof(Material), true);
             }
 
             EditorGUILayout.EndFoldoutHeaderGroup();
@@ -56,7 +58,7 @@ namespace Zigurous.Importer.CC0Textures
 
             if (GUILayout.Button("Import Textures", GUILayout.Width(200f), GUILayout.Height(25f)))
             {
-                this.outputMaterial = false;
+                outputMaterial = false;
                 Import();
             }
 
@@ -68,7 +70,7 @@ namespace Zigurous.Importer.CC0Textures
 
             if (GUILayout.Button("Import Material", GUILayout.Width(200f), GUILayout.Height(25f)))
             {
-                this.outputMaterial = true;
+                outputMaterial = true;
                 Import();
             }
 
@@ -80,17 +82,17 @@ namespace Zigurous.Importer.CC0Textures
         {
             Log.context = this;
 
-            if (this.assetId == null || this.assetId.Length == 0)
+            if (assetId == null || assetId.Length == 0)
             {
                 Log.Error("Invalid asset id");
                 return;
             }
 
-            if (!this.outputPath.EndsWith("/")) {
-                this.outputPath += "/";
+            if (!outputPath.EndsWith("/")) {
+                outputPath += "/";
             }
 
-            WebClient.DownloadAsset(this.assetId, this.resolution, this.format, this.outputPath, this.outputName, ImportComplete);
+            WebClient.DownloadAsset(assetId, resolution, format, outputPath, outputName, ImportComplete);
         }
 
         private void ImportComplete(List<string> files)
@@ -118,7 +120,7 @@ namespace Zigurous.Importer.CC0Textures
             }
 
             // Create a new material with the imported texture files
-            if (this.outputMaterial) {
+            if (outputMaterial) {
                 CreateMaterialAsset(files);
             }
 
@@ -131,8 +133,8 @@ namespace Zigurous.Importer.CC0Textures
 
             // Create a new material from the prefab or use Unity's default
             // standard shader material
-            Material material = this.materialPrefab ?
-                new Material(this.materialPrefab) :
+            Material material = materialPrefab ?
+                new Material(materialPrefab) :
                 new Material(Shader.Find("Standard"));
 
             // Assign each texture map to the right slot in the material
@@ -148,8 +150,8 @@ namespace Zigurous.Importer.CC0Textures
             }
 
             // Save the material as an asset and refresh
-            string outputName = this.outputName != null && this.outputName.Length > 0 ? this.outputName : this.assetId;
-            string assetName = outputPath + outputName + ".mat";
+            string name = outputName != null && outputName.Length > 0 ? outputName : assetId;
+            string assetName = outputPath + name + ".mat";
             AssetDatabase.CreateAsset(material, assetName);
             AssetDatabase.Refresh();
         }
@@ -162,10 +164,10 @@ namespace Zigurous.Importer.CC0Textures
 
         private string GetAssetPath(string fileName)
         {
-            string outputPath = this.outputPath.StartsWith("/") ? this.outputPath.Remove(0, 1) : this.outputPath;
-            outputPath = outputPath.StartsWith("Assets") ? outputPath : "Assets/" + outputPath;
-            outputPath = outputPath.Replace("//", "/");
-            return outputPath + fileName;
+            string path = outputPath.StartsWith("/") ? outputPath.Remove(0, 1) : outputPath;
+            path = path.StartsWith("Assets") ? path : "Assets/" + path;
+            path = path.Replace("//", "/");
+            return path + fileName;
         }
 
     }
