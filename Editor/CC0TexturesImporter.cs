@@ -26,35 +26,38 @@ namespace Zigurous.Importer.CC0Textures
 
         private void OnGUI()
         {
-            EditorGUI.indentLevel = 1;
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("CC0 Textures Importer", EditorStyles.largeLabel);
+            EditorGUILayout.LabelField("Enter an Asset ID, choose the desired Texture Resolution and Format, then import the textures or import as a material.", EditorStyles.wordWrappedLabel);
+            EditorGUILayout.Space();
 
-            showRequired = EditorGUILayout.BeginFoldoutHeaderGroup(showRequired, "Required");
-
-            if (showRequired)
+            using (new EditorGUI.IndentLevelScope(1))
             {
-                assetId = EditorGUILayout.TextField("Asset ID", assetId);
-                resolution = (TextureResolution)EditorGUILayout.EnumPopup("Resolution", resolution);
-                format = (ImageFormat)EditorGUILayout.EnumPopup("Format", format);
-                EditorGUILayout.Space();
+                showRequired = EditorGUILayout.BeginFoldoutHeaderGroup(showRequired, "Required");
+
+                if (showRequired)
+                {
+                    assetId = EditorGUILayout.TextField("Asset ID", assetId);
+                    resolution = (TextureResolution)EditorGUILayout.EnumPopup("Resolution", resolution);
+                    format = (ImageFormat)EditorGUILayout.EnumPopup("Format", format);
+                    EditorGUILayout.Space();
+                }
+
+                EditorGUILayout.EndFoldoutHeaderGroup();
+
+                showOptional = EditorGUILayout.BeginFoldoutHeaderGroup(showOptional, "Optional");
+
+                if (showOptional)
+                {
+                    outputName = EditorGUILayout.TextField("Output Name", outputName);
+                    outputPath = EditorGUILayout.TextField("Output Path", outputPath);
+                    materialPreset = (Material)EditorGUILayout.ObjectField("Material Preset", materialPreset, typeof(Material), true);
+                }
+
+                EditorGUILayout.EndFoldoutHeaderGroup();
             }
-
-            EditorGUILayout.EndFoldoutHeaderGroup();
-
-            showOptional = EditorGUILayout.BeginFoldoutHeaderGroup(showOptional, "Optional");
-
-            if (showOptional)
-            {
-                outputName = EditorGUILayout.TextField("Output Name", outputName);
-                outputPath = EditorGUILayout.TextField("Output Path", outputPath);
-                materialPrefab = (Material)EditorGUILayout.ObjectField("Material Prefab", materialPrefab, typeof(Material), true);
-            }
-
-            EditorGUILayout.EndFoldoutHeaderGroup();
-            EditorGUI.indentLevel = 0;
 
             EditorGUILayout.Space(20f);
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
 
             if (DrawCenteredButton("Import Textures"))
             {
