@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -56,26 +56,35 @@ namespace Zigurous.Importer.CC0Textures
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
 
-            if (GUILayout.Button("Import Textures", GUILayout.Width(200f), GUILayout.Height(25f)))
+            if (DrawCenteredButton("Import Textures"))
             {
                 outputMaterial = false;
                 Import();
             }
 
-            GUILayout.FlexibleSpace();
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-
-            if (GUILayout.Button("Import Material", GUILayout.Width(200f), GUILayout.Height(25f)))
+            if (DrawCenteredButton("Import Material"))
             {
                 outputMaterial = true;
                 Import();
             }
 
+            if (DrawCenteredButton("Browse Materials")) {
+                Application.OpenURL("https://ambientcg.com");
+            }
+        }
+
+        private bool DrawCenteredButton(string label, float width = 200f, float height = 25f)
+        {
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+
+            bool clicked = GUILayout.Button(label, GUILayout.Width(width), GUILayout.Height(height));
+
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
+            EditorGUILayout.Space(1f);
+
+            return clicked;
         }
 
         private void Import()
