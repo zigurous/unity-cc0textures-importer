@@ -28,7 +28,7 @@ namespace Zigurous.Importer.CC0Textures
         {
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("CC0 Textures Importer", EditorStyles.largeLabel);
-            EditorGUILayout.LabelField("Enter an Asset ID, choose the desired Texture Resolution and Format, then import the textures or import as a material.", EditorStyles.wordWrappedLabel);
+            EditorGUILayout.LabelField("Enter an Asset ID from the website, choose the desired Texture Resolution and Format, then click \"Import Textures\" or \"Import Material\".", EditorStyles.wordWrappedLabel);
             EditorGUILayout.Space();
 
             using (new EditorGUI.IndentLevelScope(1))
