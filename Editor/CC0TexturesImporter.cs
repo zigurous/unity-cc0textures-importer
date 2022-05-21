@@ -1,6 +1,7 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace Zigurous.Importer.CC0Textures
 {
@@ -9,7 +10,7 @@ namespace Zigurous.Importer.CC0Textures
         private string assetId;
         private TextureResolution resolution = TextureResolution._2K;
         private ImageFormat format = ImageFormat.JPG;
-        private Material materialPrefab;
+        private Material materialPreset;
 
         private string outputName;
         private string outputPath = "Assets/";
@@ -145,9 +146,9 @@ namespace Zigurous.Importer.CC0Textures
 
             // Create a new material from the prefab or use Unity's default
             // standard shader material
-            Material material = materialPrefab ?
-                new Material(materialPrefab) :
-                new Material(Shader.Find("Standard"));
+            Material material = materialPreset ?
+                new Material(materialPreset) :
+                new Material(GetDefaultShader());
 
             // Assign each texture map to the right slot in the material
             foreach (string fileName in files)
@@ -166,6 +167,15 @@ namespace Zigurous.Importer.CC0Textures
             string assetName = outputPath + name + ".mat";
             AssetDatabase.CreateAsset(material, assetName);
             AssetDatabase.Refresh();
+        }
+
+        private Shader GetDefaultShader()
+        {
+            if (GraphicsSettings.currentRenderPipeline != null) {
+                return GraphicsSettings.currentRenderPipeline.defaultShader;
+            } else {
+                return Shader.Find("Standard");
+            }
         }
 
         private Texture2D LoadTexture(string fileName)
