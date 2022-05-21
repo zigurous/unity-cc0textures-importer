@@ -140,7 +140,7 @@ namespace Zigurous.Importer.CC0Textures
             mapName = mapName.Replace("Color", "Albedo");
             mapName = mapName.Replace("Metalness", "Metallic");
             mapName = mapName.Replace("AmbientOcclusion", "Occlusion");
-            return Path.GetFileName(assetName + "-" + mapName);
+            return Path.GetFileName(assetName + "_" + mapName);
         }
 
         private static string GetZipFilePath()
