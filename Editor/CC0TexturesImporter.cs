@@ -29,7 +29,7 @@ namespace Zigurous.Importer.CC0Textures
         {
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("CC0 Textures Importer", EditorStyles.largeLabel);
-            EditorGUILayout.LabelField("Enter an Asset ID from the website, choose the desired Texture Resolution and Format, then click one of the import buttons.", EditorStyles.wordWrappedLabel);
+            EditorGUILayout.LabelField("Enter an Asset ID from the website, choose the desired Texture Resolution and Format, then click one of the Import buttons.", EditorStyles.wordWrappedLabel);
             EditorGUILayout.Space();
 
             using (new EditorGUI.IndentLevelScope(1))
