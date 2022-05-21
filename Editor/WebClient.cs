@@ -91,7 +91,7 @@ namespace Zigurous.Importer.CC0Textures
 
                         String entryFileName = zipEntry.Name;
 
-                        if (entryFileName.Contains("DS_Store")) {
+                        if (entryFileName.ToTextureMapType() == TextureMapType.None) {
                             continue;
                         }
 

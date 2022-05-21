@@ -24,12 +24,14 @@
                 return TextureMapType.Displacement;
             } else if (fileName.Contains("Roughness")) {
                 return TextureMapType.Roughness;
-            } else if (fileName.Contains("Metallic")) {
+            } else if (fileName.Contains("Metallic") || fileName.Contains("Metalness")) {
                 return TextureMapType.Metallic;
             } else if (fileName.Contains("Occlusion")) {
                 return TextureMapType.Occlusion;
             } else if (fileName.Contains("Emission")) {
                 return TextureMapType.Emission;
+            } else if (fileName.Contains("Color")) {
+                return TextureMapType.Albedo;
             } else {
                 return TextureMapType.None;
             }
