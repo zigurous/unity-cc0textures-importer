@@ -1,4 +1,4 @@
-﻿namespace Zigurous.Importer.CC0Textures
+﻿namespace Zigurous.AssetDownloader
 {
     public enum TextureMapType
     {
@@ -14,7 +14,7 @@
 
     public static class TextureMapTypeExtensions
     {
-        public static TextureMapType ToTextureMapType(this string fileName)
+        public static TextureMapType GetTextureMapType(this string fileName)
         {
             if (fileName.Contains("Albedo")) {
                 return TextureMapType.Albedo;
@@ -37,7 +37,7 @@
             }
         }
 
-        public static string ToTextureName(this TextureMapType mapType)
+        public static string GetTextureMapName(this TextureMapType mapType)
         {
             switch (mapType)
             {

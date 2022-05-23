@@ -1,4 +1,4 @@
-﻿namespace Zigurous.Importer.CC0Textures
+﻿namespace Zigurous.AssetDownloader
 {
     public enum ImageFormat
     {

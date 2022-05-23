@@ -1,5 +1,5 @@
 {
-    "name": "Zigurous.Importer.CC0Textures",
+    "name": "Zigurous.AssetDownloader",
     "references": [],
     "includePlatforms": [
         "Editor"

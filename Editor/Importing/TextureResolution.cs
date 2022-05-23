@@ -1,4 +1,4 @@
-﻿namespace Zigurous.Importer.CC0Textures
+﻿namespace Zigurous.AssetDownloader
 {
     public enum TextureResolution
     {
@@ -27,6 +27,24 @@
                     return "16K";
                 default:
                     return "2K";
+            }
+        }
+
+        public static int GetMaxTextureSize(this TextureResolution resolution)
+        {
+            switch (resolution)
+            {
+                case TextureResolution._1K:
+                    return 1024;
+                case TextureResolution._2K:
+                    return 2048;
+                case TextureResolution._4K:
+                    return 4096;
+                case TextureResolution._8K:
+                case TextureResolution._16K:
+                    return 8192;
+                default:
+                    return 2048;
             }
         }
 
