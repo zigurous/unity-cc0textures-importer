@@ -1,6 +1,6 @@
 ﻿namespace Zigurous.AssetDownloader
 {
-    public class TheBaseMesh : AssetSource
+    public sealed class TheBaseMesh : AssetSource
     {
         public override AssetSourceType sourceType => AssetSourceType.TheBaseMesh;
         public override string sourceUrl => "https://thebasemesh.com";

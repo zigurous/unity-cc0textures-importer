@@ -5,7 +5,7 @@ using UnityEngine.Rendering;
 
 namespace Zigurous.AssetDownloader
 {
-    public class ImportUtils
+    public static class ImportUtils
     {
         public static void UpdateTextureImportSettings(List<string> textureAssets, ImportContext context)
         {

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Zigurous.AssetDownloader
 {
-    public class AmbientCG : AssetSource
+    public sealed class AmbientCG : AssetSource
     {
         public override AssetSourceType sourceType => AssetSourceType.AmbientCG;
         public override string sourceUrl => "https://ambientcg.com";
