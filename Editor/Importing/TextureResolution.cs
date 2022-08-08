@@ -41,8 +41,9 @@
                 case TextureResolution._4K:
                     return 4096;
                 case TextureResolution._8K:
-                case TextureResolution._16K:
                     return 8192;
+                case TextureResolution._16K:
+                    return 16384;
                 default:
                     return 2048;
             }
