@@ -54,8 +54,13 @@ namespace Zigurous.AssetDownloader
 
                 Texture2D texture = AssetDatabase.LoadAssetAtPath<Texture2D>(assetPath);
 
-                if (texture != null) {
-                    material.SetTexture(mapName, texture);
+                if (texture != null)
+                {
+                    if (mapType == TextureMapType.Albedo) {
+                        material.mainTexture = texture;
+                    } else {
+                        material.SetTexture(mapName, texture);
+                    }
                 }
             }
 
