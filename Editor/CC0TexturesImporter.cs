@@ -157,8 +157,13 @@ namespace Zigurous.Importer.CC0Textures
                 TextureMapType mapType = fileName.ToTextureMapType();
                 string mapName = mapType.ToTextureName();
 
-                if (mapName != null) {
-                    material.SetTexture(mapName, texture);
+                if (mapName != null)
+                {
+                    if (mapType == TextureMapType.Albedo) {
+                        material.mainTexture = texture;
+                    } else {
+                        material.SetTexture(mapName, texture);
+                    }
                 }
             }
 
